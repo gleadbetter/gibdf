@@ -1,0 +1,157 @@
+#!/usr/bin/env node
+//const url = "mongodb://camv-d10dfdev1:27017/test";
+//const url = "mongodb://camv-d10dfdev1:27017/DevGeneric";
+//const url = "mongodb://camv-d10dfdev1:27017/Generic";
+//var whitelist=["http://localhost","http://localhost:80","http://camv-d10dfdev1", "http://camv-d10dfdev1:80"]
+//const url = process.env.MONGO_URL;  //mongoUrl =process.env.MONGO_URL;
+const url = "mongodb://dfAdmin:Cc%40m!123@camv-d10dbdev1:27017/DevGeneric?authSource=admin"
+
+/* Module dependencies. */
+const app = require('../app');
+const util = require('../util.js');
+const debug = require('debug')('api-server:server');
+const http = require('http');
+
+// -->debug<-- exposes a function; 
+// simply pass this function the name of your module, 
+// and it will return a decorated version of console.error for you to pass debug statements to. 
+// This will allow you to toggle the debug output for different parts of your module as well as the module as a whole
+
+
+//const mqtt = require('mqtt');
+//const format = require('util').format;
+
+/**
+ * Get port from environment and store in Express.
+ */
+var port = normalizePort(process.env.PORT || '8080');
+app.set('port', port);
+
+
+// Debug to see what we got from the environment
+console.log(`\r\-->MongooseUrl: ${url}  Port:${port}<-- `);
+
+/* Create HTTP server for the websocket. */
+var server = http.createServer(app);
+
+/* Listen on provided port, on all network interfaces. */
+util.connectMongoose(url, function () {
+    console.log(`Starting **** Mongoose **** HTTP server at PORT:${port}`);
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+});
+
+var ioServer = require('socket.io')(server) // 'http://localhost:8080');
+var ioClient = require('socket.io-client')('http://localhost:8080/api/v0.1.0');
+var hbId = null;
+var tdId = null;
+
+ioServer.on('connection', socket => {
+    console.log('socket.io server is connected:', socket.id);
+    socket.on('status start', () => {
+        hbId = heartbeats();
+    });
+
+    socket.on('tagdata', tags => {
+        //console.log("TAGS: " + tag);
+        tdId = recentDataFromTags(tags);
+    })
+
+    socket.on('status stop', () => {
+        console.log("Clearing interval for looking at heartbeats...");
+        clearInterval(hbId);
+    })
+
+    socket.on('tagdata stop', () => {
+        if (tdId != null) {
+            console.log("Clearing interval for recent tag data...");
+            clearInterval(tdId);
+        }
+    })
+
+    // payload is the topic and raw message from MQTT.
+    /* socket.on('mqtt in', payload => {
+      socket.broadcast.emit('mqtt out', payload);
+    }); */
+
+    // TODO implement user counting, then drop only when the last user leaves.
+    // socket.on('mqtt drop', () => {
+    //   console.log("Unsubscribing from the following:\n%s", mqttSubList.join(', '));
+    //   mqttClient.unsubscribe(mqttSubList);
+    //   mqttSubList = [];
+    // });
+});
+
+function heartbeats() {
+    var hbId = setInterval(async function () {
+        var beats = await util.getHeartBeats();
+        console.log(beats);
+        ioServer.emit('heartbeats', beats);
+    }, 5000);
+
+    return hbId;
+}
+
+function recentDataFromTags(tags) {
+    var tdId = setInterval(async function () {
+        var data = await util.getRecentTagData(tags);
+        console.log(data);
+        ioServer.emit('recentdata', data);
+    }, 5000);
+
+    return tdId;
+}
+
+
+/* Normalize a port into a number, string, or false. */
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/* Event listener for HTTP server "error" event. */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/* Event listener for HTTP server "listening" event. */
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
+}

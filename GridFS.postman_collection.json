@@ -1,0 +1,852 @@
+{
+	"info": {
+		"_postman_id": "b7936b05-e564-440a-be9a-4cb34a8f62d5",
+		"name": "GridFS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "POST Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\", jsonData.user.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"{{username}}\", \"password\": \"{{password}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"warning": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\": \"tim.bakker\", \"password\": \"ccam123\" }"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-headers",
+									"value": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+									"name": "access-control-allow-headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "access-control-allow-methods",
+									"value": "GET, POST, PUT, DELETE",
+									"name": "access-control-allow-methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "connection",
+									"value": "keep-alive",
+									"name": "connection",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"key": "content-length",
+									"value": "393",
+									"name": "content-length",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8",
+									"name": "content-type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 23 Nov 2019 02:57:55 GMT",
+									"name": "date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"189-Z5acoOzcmYQaVfIHMZ2JlFkERWs\"",
+									"name": "etag",
+									"description": "An identifier for a specific version of a resource, often a message digest"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express",
+									"name": "x-powered-by",
+									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+								}
+							],
+							"cookie": [],
+							"body": "{\"auth\":true,\"message\":\"User logged in.\",\"user\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRpbS5iYWtrZXIiLCJyb2xlcyI6WyI1ZDFiYWFjYWY5NjczYTMxMjgxM2ZjYmQiXSwiaWF0IjoxNTc0NDc3ODc1LCJleHAiOjE1NzQ3MzcwNzV9.su6v4eaBXM712qJGDTWx7S4ZUyRv2736GxRW0RC4OM4\",\"username\":\"tim.bakker\",\"firstName\":\"Tim\",\"lastName\":\"Bakker\",\"id\":\"5d262d1b7d14d54920f8ad15\",\"roles\":[\"5d1baacaf9673a312813fcbd\"]}}"
+						}
+					]
+				},
+				{
+					"name": "{{baseUrl}}/users/longlivetoken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"{{username}}\", \"password\": \"{{password}}\"}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/longlivetoken",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"longlivetoken"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dataset",
+			"item": [
+				{
+					"name": "GET filter dataset",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset/docs?name=CAM-TS-01:tsds-labviewDAQ.LV_Acoustic&startTime=2021-02-08T20:00:00.000&endTime=2021-02-09T23:59:59.710Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset",
+								"docs"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "CAM-TS-01:tsds-labviewDAQ.LV_Acoustic"
+								},
+								{
+									"key": "startTime",
+									"value": "2021-02-08T20:00:00.000"
+								},
+								{
+									"key": "endTime",
+									"value": "2021-02-09T23:59:59.710Z"
+								}
+							]
+						},
+						"description": "Filter dataset with custom filters\n"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE dataset and data",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset/5de3f2d1459ed714da21ba3d",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset",
+								"5de3f2d1459ed714da21ba3d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET dataset by name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset?name=CAM-TS-01:tsds-labviewDAQ.LV_Acoustic",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "CAM-TS-01:tsds-labviewDAQ.LV_Acoustic"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET dataset by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset/id/5ce4910101edda1f601c8975",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset",
+								"id",
+								"5ce4910101edda1f601c8975"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all tags",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset/tags",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all tags Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dataset/tags?equipment=MultiCoat",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dataset",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "equipment",
+									"value": "MultiCoat"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FilesGridFS",
+			"item": [
+				{
+					"name": "Post a file GridFS to Dev",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/gib.leadbetter/Documents/docs/api.docx"
+								},
+								{
+									"key": "description",
+									"value": "Gib Big File",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/files/gfs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"gfs"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Post a file",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/S:/Research/Generic/G-217/Working-Local/Sprint 1/G-217_Process and Resource Definition Notes.pptx"
+										},
+										{
+											"key": "description",
+											"value": "testing if this works",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/files/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"files",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "661"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"295-GYiLJwiWnoiGwX0G3Pr1hMh3FPA\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Jul 2020 16:55:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"fileId\": [\n        \"5f11d7ec82d17348287699d1\"\n    ],\n    \"_id\": \"5f11d7ec82d17348287699d2\",\n    \"fileName\": \"G-217_Process and Resource Definition Notes.pptx\",\n    \"description\": \"testing if this works\",\n    \"contentType\": \"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\n    \"size\": 58129,\n    \"uniqueName\": \"2020-07-17T16:55:08.824ZG-217_Process and Resource Definition Notes.pptx\",\n    \"chunks\": 1,\n    \"docProperties\": {\n        \"createdBy\": {\n            \"id\": \"5de52509284146dddccf573d\",\n            \"userName\": \"api\",\n            \"displayName\": \"API\"\n        },\n        \"createdDate\": \"2020-07-17T16:55:08.845Z\",\n        \"rev\": 0,\n        \"lastRevDate\": \"2020-07-17T16:55:08.845Z\",\n        \"lastModifiedBy\": {\n            \"id\": \"5de52509284146dddccf573d\",\n            \"userName\": \"api\",\n            \"displayName\": \"API\"\n        }\n    },\n    \"__v\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "GET File : id  - Grid FS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/files/gfs-single/5f92e8d894fc02a44471a34e",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"gfs-single",
+								"5f92e8d894fc02a44471a34e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET File : image/?filename=nameof the file    - Grid FS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/files/gfs-image?filename=mocom7.PNG",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"gfs-image"
+							],
+							"query": [
+								{
+									"key": "filename",
+									"value": "mocom7.PNG"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post a file GridFS to Local",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/gib.leadbetter/Documents/docs/ericPriority - Copy.txt"
+								},
+								{
+									"key": "description",
+									"value": "Gib Big File",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/upload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"upload"
+							],
+							"query": [
+								{
+									"key": "file",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Files In Array",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}gfs/files",
+							"host": [
+								"{{baseUrl}}gfs"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all File images",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}gfs/files",
+							"host": [
+								"{{baseUrl}}gfs"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Equipment",
+			"item": [
+				{
+					"name": "GET Equipment resource types",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/equipment/equipmentResourceTypes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment",
+								"equipmentResourceTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Equipment Allp name - -- retrun only name and display name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/equipment/allp?name=CAM-C42-01",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment",
+								"allp"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "CAM-C42-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Equipment by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/equipment/5b46305603fb7e00e86311a1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment",
+								"5b46305603fb7e00e86311a1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create new equipment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"equipmentID\", jsonData._id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"equipTest1\",\n\t\"displayName\": \"Equipment Test 1\",\n\t\"equipmentResourceType\":\"Spectromer\",\n\t\"createdBy\":\"Tim Bakker\",\n\t\"createdDate\":\"2019-11-14T03:51:12.520Z\",\n\t\"currentJob\":\"\",\n\t\"nextScheduledJob\":\"\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/equipment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Equipment Allp - Id -- retrun only name and display name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/equipment/allp?_id=5b46305603fb7e00e86311a1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment",
+								"allp"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "5b46305603fb7e00e86311a1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Equipment - based on ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"types\": [\r\n        \"5d55b895992355465d21ace0\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/equipment/setup?id=60639a9524cee1551c61dd0d",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipment",
+								"setup"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "60639a9524cee1551c61dd0d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
